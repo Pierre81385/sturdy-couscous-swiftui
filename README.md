@@ -13,4 +13,5 @@ App idea: Milestones, an app to track life's milestones.
   + photokit for uploading images and videos
   + swiftdata for saving instantly
   + firebase for saving longterm
-  + 
+  + AI assistance?
+  + QR code scanning and generation for sharing?
