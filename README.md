@@ -1,17 +1,28 @@
 # sturdy-couscous-swiftui
-App idea: Milestones, an app to track life's milestones.  
+App idea: Point Of Sale/E-Commerce
 
-- A place to track the who, what, when, and where of life's milestones.
-  + add people
-  + save a description
-  + add photos
-  + view as a timeline
-  + map a location option
- 
-- Sort of like a blog posting app separated by person and combining various features to craete fully features posts
-  + mapkit for location and maps
-  + photokit for uploading images and videos
-  + swiftdata for saving instantly
-  + firebase for saving longterm
-  + AI assistance?
-  + QR code scanning and generation for sharing?
+Users / Products / Orders
+
+# users
+- backend user
+- frontend user
+- qr code
+
+# products
+- name
+- description
+- price
+- quantity
+- inventory
+- image
+- qr code
+
+# orders
+- user
+- product
+- discount
+- total
+- qr code
+
+A flexible appkication for sales and e-commerce
+
