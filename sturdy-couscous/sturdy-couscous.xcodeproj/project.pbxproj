@@ -14,6 +14,8 @@
 		B141C4692C3370C700BA0E29 /* DataScannerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C4682C3370C700BA0E29 /* DataScannerRepresentable.swift */; };
 		B141C46B2C33718100BA0E29 /* QRCodeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C46A2C33718100BA0E29 /* QRCodeReader.swift */; };
 		B141C46E2C33816B00BA0E29 /* QRCodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C46D2C33816A00BA0E29 /* QRCodeGen.swift */; };
+		B141C4702C338CD300BA0E29 /* TOTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C46F2C338CD300BA0E29 /* TOTP.swift */; };
+		B141C4732C3390E000BA0E29 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = B141C4722C3390E000BA0E29 /* SwiftOTP */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,7 @@
 		B141C4682C3370C700BA0E29 /* DataScannerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataScannerRepresentable.swift; sourceTree = "<group>"; };
 		B141C46A2C33718100BA0E29 /* QRCodeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeReader.swift; sourceTree = "<group>"; };
 		B141C46D2C33816A00BA0E29 /* QRCodeGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeGen.swift; sourceTree = "<group>"; };
+		B141C46F2C338CD300BA0E29 /* TOTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOTP.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B141C4732C3390E000BA0E29 /* SwiftOTP in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +63,7 @@
 			children = (
 				B141C44F2C3366CC00BA0E29 /* sturdy_couscousApp.swift */,
 				B141C4512C3366CC00BA0E29 /* ContentView.swift */,
+				B141C46F2C338CD300BA0E29 /* TOTP.swift */,
 				B141C46C2C33724100BA0E29 /* ScannerComponent */,
 				B141C4532C3366CD00BA0E29 /* Assets.xcassets */,
 				B141C4552C3366CD00BA0E29 /* Preview Content */,
@@ -100,6 +105,9 @@
 			dependencies = (
 			);
 			name = "sturdy-couscous";
+			packageProductDependencies = (
+				B141C4722C3390E000BA0E29 /* SwiftOTP */,
+			);
 			productName = "sturdy-couscous";
 			productReference = B141C44C2C3366CC00BA0E29 /* sturdy-couscous.app */;
 			productType = "com.apple.product-type.application";
@@ -128,6 +136,9 @@
 				Base,
 			);
 			mainGroup = B141C4432C3366CC00BA0E29;
+			packageReferences = (
+				B141C4712C3390E000BA0E29 /* XCRemoteSwiftPackageReference "SwiftOTP" */,
+			);
 			productRefGroup = B141C44D2C3366CC00BA0E29 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -158,6 +169,7 @@
 				B141C4692C3370C700BA0E29 /* DataScannerRepresentable.swift in Sources */,
 				B141C46E2C33816B00BA0E29 /* QRCodeGen.swift in Sources */,
 				B141C4522C3366CC00BA0E29 /* ContentView.swift in Sources */,
+				B141C4702C338CD300BA0E29 /* TOTP.swift in Sources */,
 				B141C4502C3366CC00BA0E29 /* sturdy_couscousApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,6 +378,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B141C4712C3390E000BA0E29 /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B141C4722C3390E000BA0E29 /* SwiftOTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B141C4712C3390E000BA0E29 /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			productName = SwiftOTP;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B141C4442C3366CC00BA0E29 /* Project object */;
 }

@@ -8,18 +8,22 @@
 import SwiftUI
 import VisionKit
 
-struct CodeScannerView: View {
+struct QRCodeScan: View {
+    @Binding var key: String
     @State var isShowingScanner = true
     @State private var scannedText = ""
         
         var body: some View {
+            
             if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                 ZStack(alignment: .bottom) {
                     DataScannerRepresentable(
                         shouldStartScanning: $isShowingScanner,
                         scannedText: $scannedText,
                         dataToScanFor: [.barcode(symbologies: [.qr, .ean13])]
-                    )
+                    ).onChange(of: scannedText, {
+                        key = String(scannedText.suffix(52))
+                    })
                     
                     Text(scannedText)
                         .padding()
@@ -34,6 +38,6 @@ struct CodeScannerView: View {
         }
 }
 
-#Preview {
-    CodeScannerView()
-}
+//#Preview {
+//    QRCodeScan()
+//}
