@@ -21,23 +21,24 @@ struct TOTPView: View {
                     if let code = code {
                         Text("TOTP Code: \(code)")
                     } else {
-                        Text("Generating TOTP...")
+                        Text("Scan QR Code")
                     }
                 }
+                Button(action: {
+                    scan = true
+                }, label: {
+                    Image(systemName: "qrcode.viewfinder").tint(.black).fontWeight(.bold)
+                }).padding()
+                .navigationDestination(isPresented: $scan, destination: {
+                    QRCodeScan(key: $secret, showScanner: $scan)
+                })
                 TextField(text: $secret, label: {
                     Text("Secret Key")
                 })
                 Button(action: {
-                    scan = true
-                }, label: {
-                    Text("Scan")
-                }).navigationDestination(isPresented: $scan, destination: {
-                    QRCodeScan(key: $secret)
-                })
-                Button(action: {
                     code = generateTOTP(secret: secret, timestamp: Date().timeIntervalSince1970)!
                 }, label: {
-                    Text("Submit")
+                    Text("Verify").tint(.black)
                 })
                 
             }
