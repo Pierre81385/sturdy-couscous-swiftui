@@ -11,6 +11,7 @@ import VisionKit
 struct QRCodeScan: View {
     @Binding var key: String
     @Binding var showScanner: Bool
+    @Binding var name: String
     @State var isShowingScanner = true
     @State private var scannedText = ""
         
@@ -24,6 +25,7 @@ struct QRCodeScan: View {
                         dataToScanFor: [.barcode(symbologies: [.qr, .ean13])]
                     ).onChange(of: scannedText, {
                         key = String(scannedText.suffix(52))
+                        name = String(scannedText.suffix(15))
                         showScanner = false
                     })
                     

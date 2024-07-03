@@ -8,10 +8,14 @@
 import SwiftUI
 import SwiftOTP
 import CryptoKit
+import SwiftData
 
 struct TOTPView: View {
+    @Query var apps: [AuthenticationModel]
+    @Environment(\.modelContext) var modelContext
     @State private var code: String?
     @State private var secret: String = ""
+    @State private var name: String = ""
     @State private var scan: Bool = false
     
     var body: some View {
@@ -19,28 +23,43 @@ struct TOTPView: View {
             VStack{
                 VStack {
                     if let code = code {
-                        Text("TOTP Code: \(code)")
+                        if(code == "") {
+                            Text("OTP UNAVAILABLE")
+                        } else {
+                            VStack{
+                                Text(name)
+                                HStack{
+                                    Text("TOTP Code: \(code)")
+                                    Button(action: {
+                                        let save = AuthenticationModel(name: name, secret: secret)
+                                        modelContext.insert(save)
+                                    }, label: {
+                                        Image(systemName: "square.and.arrow.down.fill")
+                                    })
+                                }
+                            }
+                        }
                     } else {
                         Text("Scan QR Code")
                     }
-                }
+                }.onChange(of: secret, {
+                    code = generateTOTP_OTP(secret: secret, timestamp: Date().timeIntervalSince1970)
+                })
                 Button(action: {
                     scan = true
                 }, label: {
                     Image(systemName: "qrcode.viewfinder").tint(.black).fontWeight(.bold)
                 }).padding()
                 .navigationDestination(isPresented: $scan, destination: {
-                    QRCodeScan(key: $secret, showScanner: $scan)
+                    QRCodeScan(key: $secret, showScanner: $scan, name: $name)
                 })
-                TextField(text: $secret, label: {
-                    Text("Secret Key")
-                })
-                Button(action: {
-                    code = generateTOTP(secret: secret, timestamp: Date().timeIntervalSince1970)!
-                }, label: {
-                    Text("Verify").tint(.black)
-                })
-                
+                ScrollView{
+                    ForEach(apps) { app in
+                        GroupBox(app.name, content: {
+                            Text(generateTOTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? "OTP UNAVAILABLE")
+                        })
+                    }
+                }
             }
         }
     }
@@ -59,6 +78,7 @@ func generateTOTP_OTP(secret: String, timestamp: TimeInterval) -> String? {
 }
 
 func generateTOTP(secret: String, timestamp: TimeInterval) -> String? {
+    print("Getting TOTP")
     // Convert the secret key to data
     guard let keyData = Data(base32Encoded: secret) else {
         return nil
@@ -79,20 +99,57 @@ func generateTOTP(secret: String, timestamp: TimeInterval) -> String? {
     let offset = Int(hash.last! & 0x0F)
     let truncatedHash = hash[offset..<offset+4]
 
-    var number = truncatedHash.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) -> UInt32 in
-        return pointer.load(as: UInt32.self).bigEndian
-    }
+    // Ensure proper alignment by copying bytes into a UInt32
+    var number: UInt32 = 0
+    _ = withUnsafeMutableBytes(of: &number) { truncatedHash.copyBytes(to: $0) }
+    number = number.bigEndian
+
     number &= 0x7FFFFFFF  // Mask most significant bit to zero
 
     // Convert to a 6-digit code
     let otp = number % 1000000
+    
+    print(String(format: "%06d", otp))
     return String(format: "%06d", otp)
 }
 
+// Helper function to decode base32
 extension Data {
     init?(base32Encoded base32String: String) {
-        // Add Base32 decoding logic here
-        // For simplicity, you can use a third-party library or add your own implementation
-        return nil
+        let base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        let base32Map = base32Alphabet.enumerated().reduce(into: [Character: UInt8]()) { (dict, pair) in
+            dict[pair.element] = UInt8(pair.offset)
+        }
+
+        let paddingCharacter: Character = "="
+        let cleanString = base32String.uppercased().filter { base32Map.keys.contains($0) || $0 == paddingCharacter }
+        guard cleanString.count % 8 == 0 else {
+            return nil
+        }
+
+        let paddingCount = cleanString.filter { $0 == paddingCharacter }.count
+        let validString = cleanString.dropLast(paddingCount)
+        var buffer = Array<UInt8>()
+        var currentByte: UInt8 = 0
+        var bitsRemaining: UInt8 = 8
+        for character in validString {
+            guard let value = base32Map[character] else {
+                return nil
+            }
+
+            if bitsRemaining > 5 {
+                currentByte |= value >> (bitsRemaining - 5)
+                bitsRemaining -= 5
+            } else {
+                currentByte |= value << (5 - bitsRemaining)
+                buffer.append(currentByte)
+                currentByte = value >> (3 + bitsRemaining)
+                bitsRemaining += 3
+            }
+        }
+        if bitsRemaining < 8 {
+            buffer.append(currentByte)
+        }
+        self.init(buffer)
     }
 }

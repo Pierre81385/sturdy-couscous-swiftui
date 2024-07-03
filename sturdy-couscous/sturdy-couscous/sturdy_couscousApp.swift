@@ -12,6 +12,8 @@ struct sturdy_couscousApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }
+        }.modelContainer(for: [AuthenticationModel.self])
     }
 }
+
+

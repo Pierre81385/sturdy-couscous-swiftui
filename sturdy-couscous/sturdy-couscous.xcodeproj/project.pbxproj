@@ -16,6 +16,7 @@
 		B141C46E2C33816B00BA0E29 /* QRCodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C46D2C33816A00BA0E29 /* QRCodeGen.swift */; };
 		B141C4702C338CD300BA0E29 /* TOTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C46F2C338CD300BA0E29 /* TOTP.swift */; };
 		B141C4732C3390E000BA0E29 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = B141C4722C3390E000BA0E29 /* SwiftOTP */; };
+		B141C4772C34FD1C00BA0E29 /* AuthenticationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C4762C34FD1C00BA0E29 /* AuthenticationModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		B141C46A2C33718100BA0E29 /* QRCodeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeReader.swift; sourceTree = "<group>"; };
 		B141C46D2C33816A00BA0E29 /* QRCodeGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeGen.swift; sourceTree = "<group>"; };
 		B141C46F2C338CD300BA0E29 /* TOTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOTP.swift; sourceTree = "<group>"; };
+		B141C4762C34FD1C00BA0E29 /* AuthenticationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				B141C44F2C3366CC00BA0E29 /* sturdy_couscousApp.swift */,
 				B141C4512C3366CC00BA0E29 /* ContentView.swift */,
 				B141C46F2C338CD300BA0E29 /* TOTP.swift */,
+				B141C4762C34FD1C00BA0E29 /* AuthenticationModel.swift */,
 				B141C46C2C33724100BA0E29 /* ScannerComponent */,
 				B141C4532C3366CD00BA0E29 /* Assets.xcassets */,
 				B141C4552C3366CD00BA0E29 /* Preview Content */,
@@ -170,6 +173,7 @@
 				B141C46E2C33816B00BA0E29 /* QRCodeGen.swift in Sources */,
 				B141C4522C3366CC00BA0E29 /* ContentView.swift in Sources */,
 				B141C4702C338CD300BA0E29 /* TOTP.swift in Sources */,
+				B141C4772C34FD1C00BA0E29 /* AuthenticationModel.swift in Sources */,
 				B141C4502C3366CC00BA0E29 /* sturdy_couscousApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
