@@ -15,7 +15,7 @@ struct TOTPView: View {
     @Environment(\.modelContext) var modelContext
     @State private var code: String?
     @State private var secret: String = ""
-    @State private var name: String = ""
+    @State private var name: String?
     @State private var scan: Bool = false
     
     var body: some View {
@@ -27,11 +27,11 @@ struct TOTPView: View {
                             Text("OTP UNAVAILABLE")
                         } else {
                             VStack{
-                                Text(name)
+                                Text(name ?? "App")
                                 HStack{
                                     Text("TOTP Code: \(code)")
                                     Button(action: {
-                                        let save = AuthenticationModel(name: name, secret: secret)
+                                        let save = AuthenticationModel(name: name ?? "App", secret: secret)
                                         modelContext.insert(save)
                                     }, label: {
                                         Image(systemName: "square.and.arrow.down.fill")
