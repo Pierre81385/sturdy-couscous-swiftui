@@ -25,36 +25,48 @@ struct TOTPView: View {
                 GroupBox(label: Text("QR CODE_scan").fontWeight(.ultraLight), content: {
                     VStack{
                         VStack {
+                            HStack{
+                                Button(action: {
+                                    scan = true
+                                }, label: {
+                                    Image(systemName: "qrcode.viewfinder").tint(.black).font(.system(size: 60))
+                                }).padding()
+                                    .navigationDestination(isPresented: $scan, destination: {
+                                        QRCodeScan(key: $secret, showScanner: $scan, name: $name)
+                                    })
+                            
                             if let code = code {
                                 if(code == "") {
                                     Text("")
                                 } else {
-                                    VStack{
-                                        Text(name ?? "App")
-                                        HStack{
+                                    
                                             Text("TOTP Code: \(code)")
-                                            Button(action: {
-                                                let save = AuthenticationModel(name: name ?? "App", secret: secret ?? "Error getting key.", code: code, time: time ?? Date().timeIntervalSince1970)
-                                                modelContext.insert(save)
-                                            }, label: {
-                                                Image(systemName: "square.and.arrow.down.fill")
-                                            })
-                                        }
-                                    }
+                        
                                 }
+                            }
                             }
                         }.onChange(of: secret, {
                             code = generateTOTP_OTP(secret: secret ?? "Error getting key.", timestamp: Date().timeIntervalSince1970)
                             time = Date().timeIntervalSince1970
                         })
-                        Button(action: {
-                            scan = true
-                        }, label: {
-                            Image(systemName: "qrcode.viewfinder").tint(.black).font(.system(size: 60))
-                        }).padding()
-                            .navigationDestination(isPresented: $scan, destination: {
-                                QRCodeScan(key: $secret, showScanner: $scan, name: $name)
-                            })
+                        
+                            if let code = code {
+                                if(code == "") {
+                                    Text("")
+                                } else {
+                                    HStack{
+                                        Text(name ?? "App")
+                                        Spacer()
+                                        Button(action: {
+                                            let save = AuthenticationModel(name: name ?? "App", secret: secret ?? "Error getting key.", code: code, time: time ?? Date().timeIntervalSince1970)
+                                            modelContext.insert(save)
+                                        }, label: {
+                                            Image(systemName: "square.and.arrow.down.fill").tint(.black)
+                                        })
+                                }
+                            }
+                        }
+                        
                     }
                 }).padding()
   
@@ -81,7 +93,7 @@ struct TOTPView: View {
                                     Image(systemName: "x.circle.fill").tint(.black)
                                 })
                             }
-                        })
+                        }).padding()
                     }
                 }
             }
