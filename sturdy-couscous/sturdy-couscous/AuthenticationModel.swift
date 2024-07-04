@@ -12,9 +12,14 @@ import SwiftData
 @Model class AuthenticationModel {
     var name: String
     var secret: String
+    var code: String
+    var time: TimeInterval
     
-    init(name: String, secret: String) {
+    init(name: String, secret: String, code: String, time: TimeInterval) {
         self.name = name
         self.secret = secret
+        self.code = code
+        self.time = time
+        
     }
 }

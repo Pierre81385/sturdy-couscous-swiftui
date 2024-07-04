@@ -9,7 +9,7 @@ import SwiftUI
 import VisionKit
 
 struct QRCodeScan: View {
-    @Binding var key: String
+    @Binding var key: String?
     @Binding var showScanner: Bool
     @Binding var name: String?
     @State var isShowingScanner = true
@@ -29,11 +29,6 @@ struct QRCodeScan: View {
                         name = sliceName()
                         showScanner = false
                     })
-                    
-//                    Text(scannedText)
-//                        .padding()
-//                        .background(Color.white)
-//                        .foregroundColor(.black)
                 }.ignoresSafeArea()
             } else if !DataScannerViewController.isSupported {
                 Text("It looks like this device doesn't support the DataScannerViewController")
@@ -42,8 +37,8 @@ struct QRCodeScan: View {
             }
         }
     
-    //otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30
-    
+    //two separate methods to slice key and name
+        
     func sliceSecret(){
         let index = scannedText.firstIndex(of: "=")
         let startOffset = scannedText.distance(from: scannedText.startIndex, to: index!)+1

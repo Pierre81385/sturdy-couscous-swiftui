@@ -14,49 +14,73 @@ struct TOTPView: View {
     @Query var apps: [AuthenticationModel]
     @Environment(\.modelContext) var modelContext
     @State private var code: String?
-    @State private var secret: String = ""
+    @State private var secret: String?
     @State private var name: String?
+    @State private var time: TimeInterval?
     @State private var scan: Bool = false
     
     var body: some View {
         NavigationStack{
             VStack{
-                VStack {
-                    if let code = code {
-                        if(code == "") {
-                            Text("OTP UNAVAILABLE")
-                        } else {
-                            VStack{
-                                Text(name ?? "App")
-                                HStack{
-                                    Text("TOTP Code: \(code)")
-                                    Button(action: {
-                                        let save = AuthenticationModel(name: name ?? "App", secret: secret)
-                                        modelContext.insert(save)
-                                    }, label: {
-                                        Image(systemName: "square.and.arrow.down.fill")
-                                    })
+                GroupBox(label: Text("QR CODE_scan").fontWeight(.ultraLight), content: {
+                    VStack{
+                        VStack {
+                            if let code = code {
+                                if(code == "") {
+                                    Text("")
+                                } else {
+                                    VStack{
+                                        Text(name ?? "App")
+                                        HStack{
+                                            Text("TOTP Code: \(code)")
+                                            Button(action: {
+                                                let save = AuthenticationModel(name: name ?? "App", secret: secret ?? "Error getting key.", code: code, time: time ?? Date().timeIntervalSince1970)
+                                                modelContext.insert(save)
+                                            }, label: {
+                                                Image(systemName: "square.and.arrow.down.fill")
+                                            })
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        Text("Scan QR Code")
+                        }.onChange(of: secret, {
+                            code = generateTOTP_OTP(secret: secret ?? "Error getting key.", timestamp: Date().timeIntervalSince1970)
+                            time = Date().timeIntervalSince1970
+                        })
+                        Button(action: {
+                            scan = true
+                        }, label: {
+                            Image(systemName: "qrcode.viewfinder").tint(.black).font(.system(size: 60))
+                        }).padding()
+                            .navigationDestination(isPresented: $scan, destination: {
+                                QRCodeScan(key: $secret, showScanner: $scan, name: $name)
+                            })
                     }
-                }.onChange(of: secret, {
-                    code = generateTOTP_OTP(secret: secret, timestamp: Date().timeIntervalSince1970)
-                })
-                Button(action: {
-                    scan = true
-                }, label: {
-                    Image(systemName: "qrcode.viewfinder").tint(.black).fontWeight(.bold)
                 }).padding()
-                .navigationDestination(isPresented: $scan, destination: {
-                    QRCodeScan(key: $secret, showScanner: $scan, name: $name)
-                })
+  
                 ScrollView{
                     ForEach(apps) { app in
-                        GroupBox(app.name, content: {
-                            Text(generateTOTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? "OTP UNAVAILABLE")
+                        GroupBox(content: {
+                            HStack{
+                                Button(action: {
+                                    app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
+                                }, label: {
+                                    Image(systemName: "drop.keypad.rectangle.fill").tint(.black)
+                                })
+                                Text(app.code)
+                                Spacer()
+                                
+                            }
+                        }, label: {
+                            HStack{
+                                Text(app.name)
+                                Spacer()
+                                Button(action: {
+                                    modelContext.delete(app)
+                                }, label: {
+                                    Image(systemName: "x.circle.fill").tint(.black)
+                                })
+                            }
                         })
                     }
                 }
