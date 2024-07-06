@@ -77,7 +77,7 @@ struct TOTPView: View {
                                 Button(action: {
                                     app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
                                 }, label: {
-                                    Image(systemName: "drop.keypad.rectangle.fill").tint(.black)
+                                    Image(systemName: "arrow.3.trianglepath").tint(.black)
                                 })
                                 Text(app.code)
                                 Spacer()
