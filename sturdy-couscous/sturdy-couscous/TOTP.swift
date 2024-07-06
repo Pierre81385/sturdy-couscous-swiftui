@@ -33,7 +33,7 @@ struct TOTPView: View {
                                 }).padding()
                                     .navigationDestination(isPresented: $scan, destination: {
                                         QRCodeScan(key: $secret, showScanner: $scan, name: $name)
-                                    })
+                                    }).foregroundStyle(.gray)
                             
                             if let code = code {
                                 if(code == "") {
