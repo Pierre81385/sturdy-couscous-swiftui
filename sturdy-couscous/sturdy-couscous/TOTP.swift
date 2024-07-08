@@ -18,11 +18,48 @@ struct TOTPView: View {
     @State private var name: String?
     @State private var time: TimeInterval?
     @State private var scan: Bool = false
+    @State private var showList: Bool = false
     
     var body: some View {
         NavigationStack{
             VStack{
-                GroupBox(label: Text("QR CODE_scan").fontWeight(.ultraLight), content: {
+                GroupBox(label: HStack{
+                    Text("QR CODE_scan").fontWeight(.ultraLight)
+                    Spacer()
+                    Button(action: {
+                        showList = true
+                    }, label: {
+                        Image(systemName: "list.bullet").tint(.black)
+                    }).sheet(isPresented: $showList, content: {
+                        ScrollView{
+                            ForEach(apps) { app in
+                                GroupBox(content: {
+                                    HStack{
+                                        Button(action: {
+                                            app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
+                                        }, label: {
+                                            Image(systemName: "arrow.3.trianglepath").tint(.black)
+                                        })
+                                        Text(app.code)
+                                        Spacer()
+                                        
+                                    }
+                                }, label: {
+                                    HStack{
+                                        Text(app.name)
+                                        Spacer()
+                                        Button(action: {
+                                            modelContext.delete(app)
+                                        }, label: {
+                                            Image(systemName: "x.circle.fill").tint(.black)
+                                        })
+                                    }
+                                }).padding()
+                            }
+                        }
+                    })
+                    .frame(width: Double.infinity, height: 90)
+                }, content: {
                     VStack{
                         VStack {
                             HStack{
@@ -69,33 +106,6 @@ struct TOTPView: View {
                         
                     }
                 }).padding()
-  
-                ScrollView{
-                    ForEach(apps) { app in
-                        GroupBox(content: {
-                            HStack{
-                                Button(action: {
-                                    app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
-                                }, label: {
-                                    Image(systemName: "arrow.3.trianglepath").tint(.black)
-                                })
-                                Text(app.code)
-                                Spacer()
-                                
-                            }
-                        }, label: {
-                            HStack{
-                                Text(app.name)
-                                Spacer()
-                                Button(action: {
-                                    modelContext.delete(app)
-                                }, label: {
-                                    Image(systemName: "x.circle.fill").tint(.black)
-                                })
-                            }
-                        }).padding()
-                    }
-                }
             }
         }
     }
