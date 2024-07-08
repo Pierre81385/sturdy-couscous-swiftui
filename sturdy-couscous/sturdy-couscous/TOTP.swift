@@ -24,7 +24,7 @@ struct TOTPView: View {
         NavigationStack{
             VStack{
                 GroupBox(label: HStack{
-                    Text("QR CODE_scan").fontWeight(.ultraLight)
+                    Text("QR CODE_scanner").fontWeight(.ultraLight)
                     Spacer()
                     Button(action: {
                         showList = true
@@ -32,29 +32,49 @@ struct TOTPView: View {
                         Image(systemName: "list.bullet").tint(.black)
                     }).sheet(isPresented: $showList, content: {
                         ScrollView{
-                            ForEach(apps) { app in
-                                GroupBox(content: {
-                                    HStack{
-                                        Button(action: {
-                                            app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
+                            if(apps.isEmpty) {
+                                VStack{
+                                    Spacer()
+                                    Text("No Saved Passcode's Found").fontWeight(.light).padding()
+                                    Button(action: {
+                                        showList = false
+                                    }, label: {
+                                        Image(systemName: "chevron.down").tint(.black)
+                                    }).padding()
+                                    Spacer()
+                                }
+                            } else {
+                                VStack{
+                                    Button(action: {
+                                        showList = false
+                                    }, label: {
+                                        Image(systemName: "chevron.down").tint(.black).padding()
+                                    })
+                                    ForEach(apps) { app in
+                                        GroupBox(content: {
+                                            HStack{
+                                                Button(action: {
+                                                    app.code = generateTOTP_OTP(secret: app.secret, timestamp: Date().timeIntervalSince1970) ?? ""
+                                                }, label: {
+                                                    Image(systemName: "arrow.3.trianglepath").tint(.black)
+                                                })
+                                                Text(app.code)
+                                                Spacer()
+                                                
+                                            }
                                         }, label: {
-                                            Image(systemName: "arrow.3.trianglepath").tint(.black)
-                                        })
-                                        Text(app.code)
-                                        Spacer()
-                                        
+                                            HStack{
+                                                Text(app.name)
+                                                Spacer()
+                                                Button(action: {
+                                                    modelContext.delete(app)
+                                                }, label: {
+                                                    Image(systemName: "x.circle.fill").tint(.black)
+                                                })
+                                            }
+                                        }).padding()
                                     }
-                                }, label: {
-                                    HStack{
-                                        Text(app.name)
-                                        Spacer()
-                                        Button(action: {
-                                            modelContext.delete(app)
-                                        }, label: {
-                                            Image(systemName: "x.circle.fill").tint(.black)
-                                        })
-                                    }
-                                }).padding()
+                                }
                             }
                         }
                     })
@@ -69,8 +89,8 @@ struct TOTPView: View {
                                     Image(systemName: "qrcode.viewfinder").tint(.black).font(.system(size: 60))
                                 }).padding()
                                     .navigationDestination(isPresented: $scan, destination: {
-                                        QRCodeScan(key: $secret, showScanner: $scan, name: $name)
-                                    }).foregroundStyle(.gray)
+                                        QRCodeScan(key: $secret, showScanner: $scan, name: $name).navigationBarBackButtonHidden(false)
+                                    }).tint(.black)
                             
                             if let code = code {
                                 if(code == "") {
@@ -107,7 +127,7 @@ struct TOTPView: View {
                     }
                 }).padding()
             }
-        }
+        }.tint(.black)
     }
 }
 

@@ -12,13 +12,14 @@ struct QRCodeGen: View {
         
         var body: some View {
             VStack {
-                TextField("Enter code", text: $text)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
                 Image(uiImage: UIImage(data: getQRCodeDate(text: text)!)!)
                     .resizable()
                     .frame(width: 200, height: 200)
-            }
+                Text("Enter text to encode").foregroundStyle(.white).fontWeight(.light)
+                TextField("QR code content", text: $text)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+            }.padding()
         }
         
         func getQRCodeDate(text: String) -> Data? {

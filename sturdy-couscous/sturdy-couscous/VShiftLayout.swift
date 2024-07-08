@@ -17,7 +17,7 @@ struct VShiftLayout: View {
         GeometryReader { proxy in
             VStack{
                     ZStack{
-                        Color(.blue)
+                        Color(.black)
                         GroupBox(content: {
                             HStack{
                                 Spacer()
@@ -29,7 +29,7 @@ struct VShiftLayout: View {
                                                 togglePanel.toggle()
                                             }
                                         }, label: {
-                                            Image(systemName: "chevron.down").tint(.blue)
+                                            Image(systemName: "chevron.down").tint(.black)
                                         })
                                     } else {
                                         TOTPView()
@@ -95,7 +95,7 @@ struct CardGroupBoxStyleBottom: GroupBoxStyle {
             configuration.content
         }
         .padding()
-        .background(Color.blue)
+        .background(Color.black)
         .clipShape(.rect(topLeadingRadius: 75, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 0))
     }
 }

@@ -29,7 +29,15 @@ struct QRCodeScan: View {
                         name = sliceName()
                         showScanner = false
                     })
-                }.ignoresSafeArea()
+                    VStack{
+                        Spacer()
+                        GroupBox(content: {
+                            Text("Tap QR Code to Scan").foregroundStyle(.black)
+                        }).padding()
+                    }
+                }.clipShape(.rect(topLeadingRadius: 10, bottomLeadingRadius: 10, bottomTrailingRadius: 10, topTrailingRadius: 10))
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
+
             } else if !DataScannerViewController.isSupported {
                 Text("It looks like this device doesn't support the DataScannerViewController")
             } else {
